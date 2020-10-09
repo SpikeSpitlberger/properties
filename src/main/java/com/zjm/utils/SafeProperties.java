@@ -6,6 +6,7 @@ import java.util.*;
 /**
  * 扩展properties工具类
  *
+ *@author spike
  */
 public class SafeProperties {
 
