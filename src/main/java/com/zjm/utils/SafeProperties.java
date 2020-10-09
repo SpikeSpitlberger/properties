@@ -6,8 +6,6 @@ import java.util.*;
 /**
  * 扩展properties工具类
  *
- * @author tangming
- * @date 2017-11-10
  */
 public class SafeProperties {
 
@@ -222,6 +220,7 @@ public class SafeProperties {
         return props.stringPropertyNames();
     }
 
+    @Override
     public synchronized String toString() {
         StringBuffer buffer = new StringBuffer();
         Iterator<Map.Entry<String, String>> kvIter = keyCommentMap.entrySet().iterator();
@@ -239,11 +238,13 @@ public class SafeProperties {
         return buffer.toString();
     }
 
+    @Override
     public boolean equals(Object o) {
         // 不考虑注释说明是否相同
         return props.equals(o);
     }
 
+    @Override
     public int hashCode() {
         return props.hashCode();
     }
@@ -493,14 +494,15 @@ public class SafeProperties {
                     }
                     out[outLen++] = (char) value;
                 } else {
-                    if (aChar == 't')
+                    if (aChar == 't') {
                         aChar = '\t';
-                    else if (aChar == 'r')
+                    } else if (aChar == 'r') {
                         aChar = '\r';
-                    else if (aChar == 'n')
+                    } else if (aChar == 'n') {
                         aChar = '\n';
-                    else if (aChar == 'f')
+                    } else if (aChar == 'f') {
                         aChar = '\f';
+                    }
                     out[outLen++] = aChar;
                 }
             } else {
@@ -523,8 +525,9 @@ public class SafeProperties {
                  * No need to escape embedded and trailing spaces for value, hence pass false to flag.
                  */
                 val = saveConvert(val, false, escUnicode);
-                if (!comment.equals(BLANK))
+                if (!comment.equals(BLANK)) {
                     writeComments(bw, comment);
+                }
                 bw.write(key + "=" + val);
                 bw.newLine();
             }
@@ -540,8 +543,9 @@ public class SafeProperties {
         while (current < len) {
             char c = comments.charAt(current);
             if (c > '\u00ff' || c == '\n' || c == '\r') {
-                if (last != current)
+                if (last != current) {
                     bw.write(comments.substring(last, current));
+                }
                 if (c > '\u00ff') {
                     bw.write(c);
                 } else {
@@ -550,15 +554,17 @@ public class SafeProperties {
                         current++;
                     }
                     if (current == len - 1
-                            || (comments.charAt(current + 1) != '#' && comments.charAt(current + 1) != '!'))
+                            || (comments.charAt(current + 1) != '#' && comments.charAt(current + 1) != '!')) {
                         bw.write("#");
+                    }
                 }
                 last = current + 1;
             }
             current++;
         }
-        if (last != current)
+        if (last != current) {
             bw.write(comments.substring(last, current));
+        }
         bw.newLine();
     }
 
@@ -588,8 +594,9 @@ public class SafeProperties {
             }
             switch (aChar) {
                 case ' ':
-                    if (x == 0 || escapeSpace)
+                    if (x == 0 || escapeSpace) {
                         outBuffer.append('\\');
+                    }
                     outBuffer.append(' ');
                     break;
                 case '\t':
